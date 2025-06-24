@@ -1,0 +1,5 @@
+body {
+  font-family: "Inter", sans-serif;
+  /* Ensure a smooth scroll for anchored elements */
+  scroll-behavior: smooth;
+}
