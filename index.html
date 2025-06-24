@@ -46,7 +46,8 @@
                       id="fullName"
                       name="fullName"
                       placeholder="John Doe"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white sm:text-sm p-2.5"
                       required
                     />
                   </div>
@@ -63,7 +64,8 @@
                       id="email"
                       name="email"
                       placeholder="john.doe@example.com"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white sm:text-sm p-2.5"
                       required
                     />
                   </div>
@@ -249,11 +251,16 @@
           </div>
 
           <!--Action button; copy quotation, download quotation, reset form-->
-          <div></div>
+          <div id="actionButtons" class="flex flex-col sm:flex-row justify-center gap-4 mt-6 hidden"> 
+            <button id="copyQuotationBtn"></button>
+            <button id="downloadQuotationBtn"></button>
+            <button id="resetQuotationBtn"></button>
+          </div>
 
           <div id="messageBox" class="message-box"></div>
         </section>
       </main>
     </div>
   </body>
+  <script src="./src/index.js"></script>
 </html>

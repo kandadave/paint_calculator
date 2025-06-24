@@ -16,8 +16,9 @@
       "2": 1.8,
       "3": 2.5
     },
-    "laborRatePerSqm": 80,
+    "labourRatePerSqm": 80,
     "transportRate": 2000,
     "overheadPercentage": 0.05
   }
 }
+
