@@ -1,0 +1,23 @@
+{
+  "quotations": [],
+  "rates": {
+    "paintCategoryCostsPerSqm": {
+      "vinyl_matt": 150,
+      "silk_emulsion": 180,
+      "gloss_enamel": 220,
+      "weatherguard": 200,
+      "textured_paint": 250,
+      "primer": 50,
+      "roof_paint": 170,
+      "pva_emulsion": 120
+    },
+    "coatMultipliers": {
+      "1": 1.0,
+      "2": 1.8,
+      "3": 2.5
+    },
+    "laborRatePerSqm": 80,
+    "transportRate": 2000,
+    "overheadPercentage": 0.05
+  }
+}
