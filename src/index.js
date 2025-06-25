@@ -31,9 +31,9 @@ function fetchRates(){
       })
       .then(rates => {
         //Assign fetched rates to global variables
-        PAINT_CATEGORY_COSTS_PER_SQM = rates.paintCategoryCostPerSqm;
+        PAINT_CATEGORY_COSTS_PER_SQM = rates.paintCategoryCostsPerSqm;
         COAT_MULTIPLIERS = rates.coatMultipliers;
-        LABOUR_RATE_PER_SQM = rates.labourRatesPerSqm;
+        LABOUR_RATE_PER_SQM = rates.labourRatePerSqm;
         TRANSPORT_RATE = rates.transportRate;
         OVERHEAD_PERCENTAGE = rates.overheadPercentage;
 
@@ -47,7 +47,7 @@ function fetchRates(){
         showMessage('Failed to load rates. Please ensure JSON server is running on port 3000 and db.json is correctly configured.', true);
         console.error('Error fetching rates:', error)
         //Disable form if rates cannot be loaded 
-        document.getELementsByID('calculateBtn').disabled = true;
+        document.getELementById('calculateBtn').disabled = true;
       })
 }
 
@@ -80,7 +80,7 @@ function renderQuotation(data) {
         <li>Estimated Paint Material Cost: <span class="font-semibold text-indigo-600">${data.estimatedPaintMaterialCost}</span> KES</li> 
         <li>Estimated Labour Cost: <span class="font-semibold text-indigo-600">${data.estimatedLabourCost}</span> KES</li> 
         <li>Estimated Transport Cost: <span class="font-semibold text-indigo-600">${data.estimatedTransportCost}</span> KES</li> 
-        <li>Miscellaneous $ Overhead(${data.overheadPercentage}): <span class="font-semibold text-indigo-600">${data.miscellaneousCost}</span> KES</li> 
+        <li>Miscellaneous & Overhead(${data.overheadPercentage}%): <span class="font-semibold text-indigo-600">${data.miscellaneousCost}</span> KES</li> 
     `;
     quotationOutputDiv.appendChild(ul);
 
@@ -95,95 +95,105 @@ function renderQuotation(data) {
     quotationOutputDiv.classList.remove('hidden');
     document.getElementById('actionButtons').classList.remove('hidden');
     document.getElementById('noQuotationMessage').classList.add('hidden');
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-        //Get references to form and output elements
-        const quotationForm = document.getElementById('quotationForm');
-        const quotationOutputDiv = document.getElementById('quotationOutput');
-        const noQuotationMessage = document.getElementById('noQuotationMessage');
-        const actionButtonsDiv = document.getElementById('action Buttons')
+document.addEventListener('DOMContentLoaded', function() {
+    //Get references to form and output elements
+    const quotationForm = document.getElementById('quotationForm');
+    const quotationOutputDiv = document.getElementById('quotationOutput');
+    const noQuotationMessage = document.getElementById('noQuotationMessage');
+    const actionButtonsDiv = document.getElementById('actionButtons')
 
-        const copyQuotationBtn = document.getElementById('copyQuotationBtn');
-        const downloadQuotationBtn = document.getElementById('downloadQuotationBtn');
-        const resetQuotationBtn = document.getElementById('resetQuotationBtn');
+    const copyQuotationBtn = document.getElementById('copyQuotationBtn');
+    const downloadQuotationBtn = document.getElementById('downloadQuotationBtn');
+    const resetQuotationBtn = document.getElementById('resetQuotationBtn');
 
-        // Initially disable the calculate button until rates are loaded
-        document.getElementById('calculateBtn').disabled = true;
-        fetchRates(); // Fetch rates when the DOM is ready
+    // Initially disable the calculate button until rates are loaded
+    document.getElementById('calculateBtn').disabled = true;
+    fetchRates(); // Fetch rates when the DOM is ready
 
-        // Form submission handler
-        quotationForm.addEventListener('submit', function(event) {
-            event.preventDefault(); //Prevent default form submission
+    // Form submission handler
+    
+    quotationForm.addEventListener('submit', function(event) {
+        console.log('Attempted form submission')
+        event.preventDefault(); //Prevent default form submission
 
-            //Get input values
-            const fullName = document.getElementById('fullName').ariaValueMax;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const area = parseFloat(document.getElementById('area').value);
-            const coats = document.getElementById('coats').value;
-            const paintTypeElement = document.querySelector('input[name="paintType];checked'); //Get checked radio button
-            const paintType = paintTypeElement ? paintTypeElement.value : ''; // Get value of checked radio button
-            const paintCategory = document.getElementById('paintCategory').value;
-            const paintCategoryText = document.getElementById('paintCategory').options[document.getElementById('paintCategory').selectedIndex].text;//Gets the text that the user selects from HTMLOptionsCollection
+        //Get input values
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const area = parseFloat(document.getElementById('area').value);
+        const coats = document.getElementById('coats').value;
+        const paintTypeElement = document.querySelector('input[name="paintType"]:checked'); //Get checked radio button
+        const paintType = paintTypeElement ? paintTypeElement.value : ''; // Get value of checked radio button
+        const paintCategory = document.getElementById('paintCategory').value;
+        const paintCategoryText = document.getElementById('paintCategory').options[document.getElementById('paintCategory').selectedIndex].text;//Gets the text that the user selects from HTMLOptionsCollection
 
-            //Basic input validation
-            if (!fullName || !email || !phone || isNaN(area) || area <= 0 || !coats || !paintType || !paintCategory) {
-                    showMessage('Please fill in all required fields correctly.', true);
-                    return;
-            }
-
-            //Ensure rates are loaded before calculatinh
-            if(Object.keys(PAINT_CATEGORY_COSTS_PER_SQM).length === 0 || LABOUR_RATE_PER_SQM === 0 || TRANSPORT_RATE === 0){
-                showMessage('Rates are still loading or failed to load. Please ensure JSON Server is running and reload the page if needed.', true);
+        //Basic input validation
+        if (!fullName || !email || !phone || isNaN(area) || area <= 0 || !coats || !paintType || !paintCategory) {
+                showMessage('Please fill in all required fields correctly.', true);
                 return;
-            }
+        }
 
-            //Perform Calculation using fetched rates
-            const basePainCostPerSqm = PAINT_CATEGORY_COSTS_PER_SQM[paintCategory] || 0;
-            const coatMultiplier = COAT_MULTIPLIERS[coats] || 1.0; 
-            
-            const estimatedPaintMaterialCost = area * basePainCostPerSqm * coatMultiplier;
-            const estimatedLabourCost = area * LABOUR_RATE_PER_SQM;
-            const estimatedTransportCost = TRANSPORT_RATE;
-            const miscellaneousCost = (estimatedPaintMaterialCost + estimatedLaborCost + estimatedTransportCost) * OVERHEAD_PERCENTAGE;
-            const grandTotal = estimatedPaintMaterialCost + estimatedLaborCost + estimatedTransportCost + miscellaneousCost;
+        //Ensure rates are loaded before calculatinh
+        if(Object.keys(PAINT_CATEGORY_COSTS_PER_SQM).length === 0 || LABOUR_RATE_PER_SQM === 0 || TRANSPORT_RATE === 0){
+            showMessage('Rates are still loading or failed to load. Please ensure JSON Server is running and reload the page if needed.', true);
+            return;
+        }
 
-            //Format numbers to 2 decimal places for currency
-            const formatCurrency = (amount) => amount.toFixed(2)
+        //Perform Calculation using fetched rates
+        const basePainCostPerSqm = PAINT_CATEGORY_COSTS_PER_SQM[paintCategory] || 0;
+        const coatMultiplier = COAT_MULTIPLIERS[coats] || 1.0; 
+        
+        const estimatedPaintMaterialCost = area * basePainCostPerSqm * coatMultiplier;
+        const estimatedLabourCost = area * LABOUR_RATE_PER_SQM;
+        const estimatedTransportCost = TRANSPORT_RATE;
+        const miscellaneousCost = (estimatedPaintMaterialCost + estimatedLabourCost + estimatedTransportCost) * OVERHEAD_PERCENTAGE;
+        const grandTotal = estimatedPaintMaterialCost + estimatedLabourCost + estimatedTransportCost + miscellaneousCost;
 
-            //Prepare quotation data for display and submission
-            currentQuotationData = {
-                fullName: fullName,
-                email: email,
-                phone: phone,
-                area: area,
-                coats: coats,
-                paintType: paintType.charAt(0).toUpperCase() + paintType.slice(1),
-                paintCategory: paintCategoryText,
-                estimatedPaintMaterialCost: formatCurrency(estimatedPaintMaterialCost),
-                estimatedLaborCost: formatCurrency(estimatedLaborCost),
-                estimatedTransportCost: formatCurrency(estimatedTransportCost),
-                miscellaneousCost: formatCurrency(miscellaneousCost),
-                grandTotal: formatCurrency(grandTotal),
-                overheadPercentage: (OVERHEAD_PERCENTAGE * 100).toFixed(0), // For display
-                timestamp: new Date().toISOString()
-            }
+        //Format numbers to 2 decimal places for currency
+        const formatCurrency = (amount) => amount.toFixed(2)
 
-            //Display Results in the right column dynamically
-            renderQuotation(currentQuotationData)
+        //Prepare quotation data for display and submission
+        currentQuotationData = {
+            fullName: fullName,
+            email: email,
+            phone: phone,
+            area: area,
+            coats: coats,
+            paintType: paintType.charAt(0).toUpperCase() + paintType.slice(1),
+            paintCategory: paintCategoryText,
+            estimatedPaintMaterialCost: formatCurrency(estimatedPaintMaterialCost),
+            estimatedLabourCost: formatCurrency(estimatedLabourCost),
+            estimatedTransportCost: formatCurrency(estimatedTransportCost),
+            miscellaneousCost: formatCurrency(miscellaneousCost),
+            grandTotal: formatCurrency(grandTotal),
+            overheadPercentage: (OVERHEAD_PERCENTAGE * 100).toFixed(0), // For display
+            timestamp: new Date().toISOString()
+        }
 
-            //Send current quotation data to JSON server
+        //Display Results in the right column dynamically
+        renderQuotation(currentQuotationData)
 
-            //Copy Quotation to Clipboard
+        //Send current quotation data to JSON server
 
-            //Download Quotation
+        
 
-            //Send the quotation through email
-
-            //Reset the form 
-
-
-        })
 
     })
-}
+
+    //Action buttons
+    //Copy Quotation to Clipboard
+    document.getElementById('copyQuotationBtn').addEventListener('click', function() {
+        if (!currentQuotationData) return;
+        // copy functionality 
+        showMessage('Copied to clipboard!');
+    });
+
+    //Download Quotation
+
+    //Send the quotation through email
+
+    //Reset the form 
+
+})
