@@ -47,7 +47,7 @@ function fetchRates(){
       })
       .catch(error => {
         showMessage('Failed to load rates. Please ensure JSON server is running on port 3000 and db.json is correctly configured.', true);
-        // console.error('Error fetching rates:', error)
+        console.error('Error fetching rates:', error)
         //Disable form if rates cannot be loaded 
         document.getElementById('calculateBtn').disabled = true;
       })
@@ -189,7 +189,7 @@ function editQuotation(data) {
     document.getElementById('paintCategory').value = paintCategoryValue || '';
 
     //Set editing mode
-    editQuotationId = data.id || null;
+    editingQuotationId = data.id || null;
     document.getElementById('calculateBtn').textContent = 'UpdateQuotation';
     showMessage('Editing quotation. Update and submit to save changes.');
 }
@@ -201,7 +201,7 @@ function deleteQuotation(id){
     }
     if (!confirm('Are you sure you want to relete this quotation?')) return;
 
-    fetch(`${BASE_URL}/${id}`, {
+    fetch(`${BASE_URL}/quotations/${id}`, {
         method: 'DELETE'
     })
         .then(res => {
