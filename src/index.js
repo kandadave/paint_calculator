@@ -1,4 +1,4 @@
-
+const BASE_URL = 'https://paint-calculator-server.onrender.com/' 
 //Custom message box function 
 function showMessage(message, isError=false){
     const messageBox = document.getElementById('messageBox');
@@ -23,7 +23,7 @@ let currentQuotationData = null; //To store the last calculated quotation for co
 let editingQuotationId = null; //To track if we're editing a quotation
 
 function fetchRates(){
-    fetch('http://localhost:3000/rates')
+    fetch(`${BASE_URL}/rates`)
       .then( response => {
         if(!response.ok){
             //If response is not OK, throw an error to be caught by .catch()
@@ -201,7 +201,7 @@ function deleteQuotation(id){
     }
     if (!confirm('Are you sure you want to relete this quotation?')) return;
 
-    fetch(`http://localhost:3000/quotations/${id}`, {
+    fetch(`${BASE_URL}/${id}`, {
         method: 'DELETE'
     })
         .then(res => {
@@ -210,7 +210,7 @@ function deleteQuotation(id){
             }
             showMessage('Quotation deleted successfully')
             //Refresh history
-            fetch('http://localhost:3000/quotations')
+            fetch(`${BASE_URL}/quotations`)
                 .then(res => res.json())
                 .then(data => renderHistoryQuotation(data))
                 .catch(error => {
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchRates(); // Fetch rates when the DOM is ready
 
     //Fetch and render quotation history on page load
-    fetch('http://localhost:3000/quotations')
+    fetch(`${BASE_URL}/quotations`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`)
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderQuotation(currentQuotationData)
 
         //Send current quotation data to JSON server
-        fetch('http://localhost:3000/quotations', {
+        fetch(`${BASE_URL}/quotations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Quotation saved to JSON Server:', savedQuotation);
 
             //Fetch and render updated quotation history
-            fetch('http://localhost:3000/quotations')
+            fetch(`${BASE_URL}/quotations`)
                 .then(res => res.json())
                 .then(data => {
                     renderHistoryQuotation(data) //Render updated history
