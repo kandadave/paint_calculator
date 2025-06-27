@@ -1,4 +1,4 @@
-const BASE_URL = 'https://paint-calculator-server.onrender.com/' 
+const BASE_URL = 'https://paint-calculator-server.onrender.com' 
 //Custom message box function 
 function showMessage(message, isError=false){
     const messageBox = document.getElementById('messageBox');
