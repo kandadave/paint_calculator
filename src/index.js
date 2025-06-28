@@ -97,12 +97,22 @@ function renderQuotation(data) {
     //Action Buttons for Current Quotation
     const currentActionButtons = document.createElement('div');
     currentActionButtons.className = 'flex flex-col sm:flex-row justify-center gap-4 mt-6'
-    //Add action buttons with html attribute events.(also stringify the data and  replace all " with $quot; to prevent errors)
-    currentActionButtons.innerHTML = `        
-        <button onclick="editQuotation(${JSON.stringify(data).replace(/"/g, '&quot;')})" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700">Edit Quotation</button>
-        <button onclick="deleteQuotation(${data.id || 'null'})" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">Delete Quotation</button>
-    `
-    quotationOutputDiv.appendChild(currentActionButtons)
+    // Create edit button
+    const editButton = document.createElement('button');
+    editButton.className = 'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700';
+    editButton.textContent = 'Edit Quotation';
+    editButton.addEventListener('click', () => editQuotation(data));
+    
+    // Create delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700';
+    deleteButton.textContent = 'Delete Quotation';
+    deleteButton.addEventListener('click', () => deleteQuotation(data.id || null));
+    
+    // Append buttons
+    currentActionButtons.appendChild(editButton);
+    currentActionButtons.appendChild(deleteButton);
+    quotationOutputDiv.appendChild(currentActionButtons);
 
     //Show quotation output and action buttons, hide initial message
     quotationOutputDiv.classList.remove('hidden');
@@ -153,7 +163,7 @@ function renderHistoryQuotation(data) {
             Estimated Grand Total: <span class="font-semibold">${data.grandTotal}</span> KES
         </p>
     `
-
+    
     //Action Buttons for Current Quotation
     const currentActionButtons = document.createElement('div');
     currentActionButtons.className = 'flex flex-col sm:flex-row justify-center gap-4 mt-6'
@@ -333,12 +343,11 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(currentQuotationData)
         })
-          .then(res => {
+          .then(async res => {
             if(!res.ok){
                 //If not Ok, throw new error
-                return res.json().then(errorData => {
-                    throw new Error(errorData.message || res.statusText)
-                })
+                const errorData = await res.json();
+                throw new Error(errorData.message || res.statusText);
             }
             return res.json();
           })
@@ -366,3 +375,5 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
 })
+
+
