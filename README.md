@@ -1,12 +1,12 @@
 # The Paint Calculator
 
-A practical web application for generating paint quotations, built with HTML, CSS (Tailwind CSS), and JavaScript, featuring a mock backend with JSON Server.
+A practical web application for generating paint quotations, built with HTML, CSS (Tailwind CSS), and JavaScript, featuring a live backend hosted on Render.com.
 
 By David Chumo
 
 ## Description
 
-This application helps users easily calculate estimated costs for painting projects. It's designed to demonstrate key front-end development concepts, including form handling, dynamic calculations, DOM manipulation, and asynchronous data fetching. The application uses **JSON Server** to simulate a backend API, allowing for the storage and retrieval of quotation history, providing a persistent experience for users.
+This application helps users easily calculate estimated costs for painting projects. It's designed to demonstrate key front-end development concepts, including form handling, dynamic calculations, DOM manipulation, and asynchronous data fetching. The application interacts with a live backend API  which uses **JSON Server** to manage the storage and retrieval of quotation history, providing a persistent and robust experience for users.
 
 ## Features
 
