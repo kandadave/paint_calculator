@@ -124,10 +124,8 @@ function renderCurrentQuotation(data) {
     if (!actionButtonsDiv) {
         actionButtonsDiv = document.createElement('div');
         actionButtonsDiv.id = 'actionButtons';
-        // Append it to parent
-        // It should be right after quotationOutputDiv
+        // Append it to parent, it should be right after quotationOutputDiv
         quotationOutputDiv.after(actionButtonsDiv);
-        // You might want to add initial classes if needed, e.g., actionButtonsDiv.classList.add('flex', 'flex-col', 'sm:flex-row', 'justify-center', 'gap-4', 'mt-6');
     }
     actionButtonsDiv.innerHTML = ''; // Clear existing buttons if it already existed
 
