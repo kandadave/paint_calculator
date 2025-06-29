@@ -11,7 +11,7 @@ function showMessage(message, isError = false) {
     messageBox.style.display = 'block';
     setTimeout(() => {
         messageBox.style.display = 'none';
-    }, 4000); // Hide after 4 seconds
+    }, 6000); // Hide after 6 seconds
 }
 
 // Global variables to store fetched rates
