@@ -1,6 +1,6 @@
 # The Paint Calculator
 
-A practical web application for generating paint quotations, built with HTML, CSS (Tailwind CSS), and JavaScript, featuring a live backend hosted on Render.com.
+A practical web application for generating paint quotations, built with HTML, CSS (Tailwind CSS), and JavaScript, featuring a live backend.
 
 By David Chumo
 
