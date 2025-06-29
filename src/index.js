@@ -153,11 +153,13 @@ function renderHistoryQuotations(quotations) {
     const quoteHistory = document.getElementById('quotation-history');
     quoteHistory.innerHTML = ''; // Clear previous content
 
+    //Check if fetched data is valid
     if (!quotations || !Array.isArray(quotations) || quotations.length === 0) {
         quoteHistory.innerHTML = '<p class="text-gray-500">No quotation found in history</p>';
         return;
     }
 
+    //Create a div for each quotation to display them in the quotation history section
     quotations.forEach(data => {
         const quoteDiv = document.createElement('div');
         quoteDiv.className = 'border border-gray-200 p-4 mb-4 rounded-md shadow-sm';
@@ -196,7 +198,7 @@ function renderHistoryQuotations(quotations) {
         // Action Buttons for History Quotation
         const historyActionButtons = document.createElement('div');
         historyActionButtons.className = 'flex flex-col sm:flex-row justify-center gap-4 mt-6';
-        // Use an anonymous function to ensure `data` is correctly captured
+        // Use html attribute events for these buttons
         historyActionButtons.innerHTML = `
             <button onclick='populateFormForEdit(${JSON.stringify(data).replace(/'/g, "\\'")})' class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700">Edit Quotation</button>
             <button onclick="deleteQuotation(${data.id || 'null'})" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">Delete Quotation</button>
@@ -374,7 +376,7 @@ function handleQuotationFormSubmit(event) {
             fetchAndRenderHistory();
         })
         .catch(error => {
-            showMessage(`${error.message}`, true);
+            showMessage(`${errorMessagePrefix}: ${error.message}`, true);
             console.error('Error sending data to JSON Server:', error);
         });
 }
