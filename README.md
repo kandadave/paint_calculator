@@ -97,7 +97,7 @@ If you want to run the project locally, follow these steps:
   * **HTML5**: For structuring the web content.
   * **CSS3**: For styling and creating the appealing, responsive layout, primarily using **Tailwind CSS**.
   * **JavaScript (ES6+)**: For all interactive functionalities, DOM manipulation, form handling, and asynchronous operations (using `Fetch API` with Promises) to interact with the mock backend.
-  * **JSON Server**: A lightweight tool used to quickly create a fake REST API, providing persistence for quotation data to the `db.json` file.
+  * **JSON Server**: The application uses a JSON Server to provide lightweight REST API for supplying the rates and managing quotation data. This server is hosted on Render.com, offering persistence for out `db.json` file.
 
 ## Support and Contact Details
 
