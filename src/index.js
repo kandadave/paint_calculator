@@ -159,8 +159,13 @@ function renderHistoryQuotations(quotations) {
         return;
     }
 
+    //Sort quotations array in descending order based on ID
+    const sortedQuotations = [...quotations].sort((a,b) => {
+        return b.id -a.id;
+    });
+
     //Create a div for each quotation to display them in the quotation history section
-    quotations.forEach(data => {
+    sortedQuotations.forEach(data => {
         const quoteDiv = document.createElement('div');
         quoteDiv.className = 'border border-gray-200 p-4 mb-4 rounded-md shadow-sm';
 
